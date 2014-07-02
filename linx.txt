@@ -1,3 +1,5 @@
 //readwrite.com/2013/09/30/understanding-github-a-journey-for-beginners-part-1
-appharbor.com
+//stackoverflow.com/questions/14971395/how-to-give-up-the-unsynced-commits-in-github-for-windows
+//stackoverflow.com/questions/3197413/how-do-i-delete-unpushed-git-commits
+//appharbor.com
 //nathanaeljones.com/blog/2014/azure My experience with Azure

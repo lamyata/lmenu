@@ -19,5 +19,19 @@ function clearMessage() {
 	Form1.txtMessage.value=''
 }
 &lt;/script&gt;</pre>
+<hr />
+<div id="o"></div>
+<script>
+function display(txt){o.innerHTML += "<br />" + txt}
+
+myVar=null
+if (myVar==null)
+	o.innerHTML = "myVar==null";
+if (!myVar)
+	o.innerHTML += "!window.myVar";
+	
+window.a = 0;
+display("'a' in window? " + ('a' in window));
+</script>
 </body>
 </html>

@@ -1,28 +1,30 @@
+var activeTabId
+
 function init(){
-  window.activeTabId=null
   window.expandCallback=null
   window.pullit=null
   window.drawit=null
   refreshRate = 20
   var tabId=getCookie('tabId')
   var s = new Array()
-	for(var i=0;i<tabs.length;i++)
-		s[i]=Slide(i,-140,locs[i],tabs[i],words[i],linx[i],i==tabId)}
+  for(var i=0;i<tabs.length;i++)
+	s[i]=Slide(i,-140,locs[i],tabs[i],words[i],linx[i],i==tabId)
+}
 
 window.onmouseover=function(){
-  window.expandCallback = null
+  window.expandCallback = null;
   collapseActiveTab()
 }
 function setCallback(newFunction){window.expandCallback=newFunction}
 function collapseActiveTab(){
   cpi();cdi()
-  if(window.activeTabId!=null)drawit=setInterval(collapse,refreshRate)
+  if(activeTabId)drawit=setInterval(collapse,refreshRate)
 }
 function collapse(){
   cpi()
-  if (window.activeTabId!=null){
-    var d1 = document.getElementById("t" + window.activeTabId + "d1")
-    var d2 = document.getElementById("t" + window.activeTabId + "d2")
+  if (activeTabId){
+    var d1 = document.getElementById("t" + activeTabId + "d1")
+    var d2 = document.getElementById("t" + activeTabId + "d2")
     if(d1&&d2){
       var s1 = d1.style
       var s2 = d2.style
@@ -31,7 +33,7 @@ function collapse(){
         s2.left=parseInt(s2.left)-10+'px'
       }
       else if (cdi()){
-        window.activeTabId = null
+        activeTabId = null
         s2.zIndex=0
         if (window.expandCallback) expandCallback()
       }
@@ -94,7 +96,7 @@ function Slide(id,left,tabTop,tabText,words,linx,expanded){
   }
 
   function expand(){
-    if (window.activeTabId==null||window.activeTabId==id){
+    if (activeTabId==null||activeTabId==id){
       if (parseInt(s1.left)<endeff){
         cdi()
         s1.left=parseInt(s1.left)+10+"px"
@@ -107,25 +109,20 @@ function Slide(id,left,tabTop,tabText,words,linx,expanded){
   
   function expandTab(){
     window.expandCallback=null
-    if(window.activeTabId!=null&&window.activeTabId!=id){
+    if(activeTabId&&activeTabId!=id){
       window.expandCallback=expandTab
       collapseActiveTab() 
     }
     else if(window.pullit==null){
-      window.activeTabId = id
+      activeTabId = id;
       pullit = setInterval(expand,refreshRate)
     }
   }
     
   d1.onmouseover = d2.onmouseover = function(e){
-    expandTab()
+    expandTab();
     e.stopPropagation()
   }
-
-/*  d1.onclick=function(){
-    //setCookie('tabId',id)
-    //location.href=d2.innerHTML + '.htm'
-  }*/
 
   document.body.appendChild(d1)
   document.body.appendChild(d2)

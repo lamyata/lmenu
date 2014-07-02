@@ -1,0 +1,4 @@
+body{margin-left:80px}
+div.s{padding-left:10px}
+div.s,div.t{border:solid 3px #888;position:absolute;background:white}
+div.t{border-left:none;padding-left:2px;text-align:right;padding:3px}

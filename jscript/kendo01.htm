@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <title>Cells with buttons - jsFiddle demo</title>
+  
+  <link rel="stylesheet" type="text/css" href="http://cdn.kendostatic.com/2013.2.716/styles/kendo.common.min.css">
+  <link rel="stylesheet" type="text/css" href="http://cdn.kendostatic.com/2013.2.716/styles/kendo.default.min.css">
+  <script type='text/javascript' src="http://cdn.kendostatic.com/2013.2.716/js/jquery.min.js"></script>
+  <script type='text/javascript' src="http://cdn.kendostatic.com/2013.2.716/js/kendo.all.min.js"></script>
+  
+<style type='text/css'>
+    #grid {
+    width : 490px;
+}
+</style>
+
+<script type='text/javascript'>//<![CDATA[ 
+window.onload=function(){
+var ds = [
+    { ID : 1, RowID : 1, BillNumber : "bn1" },
+    { ID : 2, RowID : 2, BillNumber : "bn2" },
+    { ID : 3, RowID : 3, BillNumber : "bn3" }
+];
+
+var grid = $("#grid").kendoGrid({
+    dataSource: ds,
+	groupable: true,
+	toolbar: ["create", "save", "cancel"],
+    columns: [
+        { field: "ID", Title: "ID", filterable: false, sortable: false, hidden: false },
+        { field: "BillNumber", Title: "BillNumber", filterable: false, sortable: false, hidden:true },
+        {
+            title: "Preview ", 
+            template: '<input type="button" class="k-button info" name="info" value="Info" />',                       
+            headerTemplate: '<label>  <input type="checkbox" id="checkAll"/>Print All</label>', 
+            filterable: false, 
+            sortable: false, 
+            width: 100                     
+        }
+    ]
+}).data("kendoGrid");
+
+$(".info").on("click", function() {
+	var row = $(this).closest("tr");
+	var item = grid.dataItem(row);
+	alert("Selected item is:" + JSON.stringify(item));
+});
+
+}//]]>  
+</script>
+</head>
+
+<body>
+<div id="grid"></div>
+
+<p>Refs</p>
+<ul>
+<li>http://stackoverflow.com/questions/14536083/kendo-grid-groupping</li>
+<li>http://jsfiddle.net/m8fsv/1/</li>
+</ul>
+
+<div id="grid2"></div>
+<script>
+$("#grid2").kendoGrid({
+  dataSource: {
+    data: [ { 
+      department: "A",
+      "class": 1,
+      type: "Evening"
+    },{ 
+      department: "A",
+      "class": 2,
+      type: "Morning"
+    }, { 
+      department: "B",
+      "class": 1,
+      type: "Evening"
+    }, { 
+      department: "B",
+      "class": 2,
+      type: "Morning"
+    }],
+    // group by "department" and "class"
+    group: [ { field: "department" }, { field: "class" } ] 
+  },
+  columns: [ { field: "type" } ]
+});
+</script>
+
+<p>Refs</p>
+<ul>
+<li>http://stackoverflow.com/questions/15517256/subgroup-header-for-a-kendo-ui-grid-group-header</li>
+<li>http://jsbin.com/ejalut/1/edit</li>
+</ul>
+
+<div id="grid3"></div>
+<script>
+$("#grid3").kendoGrid({
+    dataSource: {
+        data: [{FirstName: "FirstName1", LastName: "LastName1"},
+              {FirstName: "FirstName1", LastName: "LastName2"},
+              {FirstName: "FirstName3", LastName: "LastName3"},
+              {FirstName: "FirstName1", LastName: "LastName4"}],
+        group: { field: "FirstName" } // set grouping for the dataSource
+    },
+    groupable: false, // this will remove the group bar
+    sortable: true,
+    columns: ["FirstName","LastName"]
+});
+</script>
+<p>Refs</p>
+<ul>
+<li>http://www.telerik.com/forums/render-grid-with-a-group-column-by-default-i-do-not-want-the-drag-and-drop-option-on-ui</li>
+</ul>
+
+<div id="grid4"></div>
+<script>
+
+var locations = [
+{  
+    "id": 1,
+    "name": "Maui",
+    "country": "USA",
+    "description": "The second largest Hawaiian island and is known as the Valley Isle",
+    "votes": 20
+},
+{
+    "id": 2,
+    "name": "Dubai",
+    "country": "UAE",
+    "description": "Dubai is a business and cultural center for the middle east",
+    "votes": 18
+}
+];
+
+var dataSource = new kendo.data.DataSource({
+    data: locations,
+    aggregate: [
+        { field: "votes", aggregate: "sum" },
+        { field: "votes", aggregate: "min" },
+        { field: "votes", aggregate: "max" },
+        { field: "votes", aggregate: "average" }
+    ]
+});
+
+
+$("#grid4").kendoGrid({
+    dataSource: dataSource,
+    columns: [
+        {
+            field: "votes",
+            title: "Votes",
+            footerTemplate:
+            "Total Votes: #=sum# <br />(Min: #=min#, Max: #=max#, Average: #=average#)"
+        }
+    ]
+});
+
+</script>
+
+</body>
+</html>
+

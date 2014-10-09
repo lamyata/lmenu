@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <title>Cells with buttons - jsFiddle demo</title>
+  
+  <link rel="stylesheet" type="text/css" href="http://cdn.kendostatic.com/2013.2.716/styles/kendo.common.min.css">
+  <link rel="stylesheet" type="text/css" href="http://cdn.kendostatic.com/2013.2.716/styles/kendo.default.min.css">
+  <script type='text/javascript' src="http://cdn.kendostatic.com/2013.2.716/js/jquery.min.js"></script>
+  <script type='text/javascript' src="http://cdn.kendostatic.com/2013.2.716/js/kendo.all.min.js"></script>
+  
+<script type='text/javascript'>//<![CDATA[ 
+window.onload=function(){
+
+    var productsDataSource = new kendo.data.DataSource({
+        type: "odata",
+        serverFiltering: true,
+        transport: {
+            read: "http://demos.kendoui.com/service/Northwind.svc/Products"
+        }   
+    });
+		
+    var products = $("#products").kendoDropDownList({
+        optionLabel: "Select product...",
+        dataTextField: "ProductName",
+        dataValueField: "ProductID",
+        dataSource: productsDataSource,
+        change: function() {
+            var value = this.value();
+
+            if (value) {
+                divOut.innerHTML = value;
+            }
+        }
+    }).data("kendoDropDownList");		
+		
+}
+
+var i = 0;
+
+function Bla(){
+    var prods = $("#products").data("kendoDropDownList");
+    i = i>0 ? 0 : 1;
+    prods.select(i);
+    divOut.innerHTML = i;
+}
+
+function SetValue(){
+    var prods = $("#products").data("kendoDropDownList");
+		prods.value(5);
+}
+
+//]]>  
+</script>
+</head>
+
+<body>
+
+<div id="divOut"></div>
+<hr />
+<input type="button" id="button1" onClick="Bla()" value="Button 1" />
+<button onClick="SetValue()">Click me</button> 
+<hr/>
+<input id="products" />
+<p>Refs</p>
+<ul>
+<li>http://stackoverflow.com/questions/14536083/kendo-grid-groupping</li>
+<li>http://jsfiddle.net/m8fsv/1/</li>
+</ul>
+
+</body>
+</html>
+

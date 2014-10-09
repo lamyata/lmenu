@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <script src="cpus.js"></script>
+  <script src="jquery-2.1.0.js"></script>
+  <link rel="stylesheet" type="text/css" href="http://cdn.kendostatic.com/2014.2.903/styles/kendo.common.min.css">
+  <link rel="stylesheet" type="text/css" href="http://cdn.kendostatic.com/2014.2.903/styles/kendo.default.min.css">
+  <script type='text/javascript' src="http://cdn.kendostatic.com/2014.2.903/js/jquery.min.js"></script>
+  <script type='text/javascript' src="http://cdn.kendostatic.com/2014.2.903/js/kendo.all.min.js"></script>
+	<style>
+		body{font:90% sans-serif}
+	</style>
+<script>
+  
+var abbrevs = [
+    { code : "SOI", description : "Silicon on Insulator" },
+    { code : "SHP", description : "Super High Performance" }
+];
+ 
+var cols = [
+{field:"model"},
+{field:"series"},
+{field:"uArch", width: 100},
+{field:"codename", title: "Code Nm", width: 90},
+{field:"clockRateGHz", title: "GHz", width: 50},
+{field:"turboGHz", title: "Trb", width: 45},
+{field:"dieSizeMM2", title: "die", width: 60},
+{field:"tdp", width: 40},
+{field:"transistorCountMln", title: "mln tr", width: 60, attributes: {style: "text-align: right"}},
+{field:"technology", title: "tech", width: 50},
+{field:"technologyNM", title: "nm", width: 40},
+{field:"memoControllerDDR3",title: "DDR3", width: 60},
+{field:"level1CacheKB",title:"lvl1", width: 50},
+{field:"level2CacheKB",title:"lvl2", width: 60},
+{field:"numberOfCores",title:"cores", width: 60},
+{field:"announcementDate",title:"date", width: 100},
+{field:"cineB",title: "rate",width: 60}
+]
+ 
+$(function(){
+  $("#grd").kendoGrid({
+		dataSource: cpus,
+		columns: cols
+  });
+	var vm = kendo.observable({o_abbr: abbrevs});
+	kendo.bind($("ul"), vm);
+});
+
+</script>
+
+</head>
+
+<body>
+<div id="grd"></div>
+<ul data-template="ul-template" data-bind="source: o_abbr"></ul>
+<input type="text" />
+<input id="parent" />
+<input id="ddl" />
+<input id="datepicker"/>
+</body>
+</html>
+<script type="text/javascript">
+      $("#parent").kendoDropDownList({
+        dataTextField: "parentName",
+        dataValueField: "parentId",
+        dataSource: [
+          { parentName: "Parent1", parentId: 1 },
+          { parentName: "Parent2", parentId: 2 }
+        ]
+      });
+      
+			
+	var ddl = $("#ddl").kendoDropDownList({
+		dataSource: {			data: ["One", "Two"]  },
+		filter: 'contains'
+	});
+      $(".k-dropdow").on('mouseover', function(){
+        $('#parent').data("kendoDropDownList").open();
+      })
+			
+      $(".k-dropdown").on('focus', function(){
+        $('#parent').data("kendoDropDownList").open();
+      })
+			
+	$(function() {
+		$("#datepicker").kendoDatePicker();
+	});
+</script>
+<script id="ul-template" type="text/x-kendo-template">
+    <li>
+        <span data-bind="text: code"></span> - <span data-bind="text: description">
+    </li>
+</script>

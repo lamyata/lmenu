@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <script src="cpus.js"></script>
+  <script src="jquery-2.1.0.js"></script>
+  <link rel="stylesheet" type="text/css" href="http://cdn.kendostatic.com/2014.2.716/styles/kendo.common.min.css">
+  <link rel="stylesheet" type="text/css" href="http://cdn.kendostatic.com/2014.2.716/styles/kendo.default.min.css">
+  <script type='text/javascript' src="http://cdn.kendostatic.com/2014.2.716/js/jquery.min.js"></script>
+  <script type='text/javascript' src="http://cdn.kendostatic.com/2014.2.716/js/kendo.all.min.js"></script>
+<script>
+  
+var ds = [
+    { ID : 1, RowID : 1, BillNumber : "bn1" },
+    { ID : 2, RowID : 2, BillNumber : "bn2" },
+    { ID : 3, RowID : 3, BillNumber : "bn3" }
+];
+ 
+var cols = [
+{field:"model"},
+{field:"series"},
+{field:"uArch", width: 60},
+{field:"codename", title: "Code Name"},
+{field: "clockRateGHz", title: "GHz", width: 50},
+{field:"turboGHz", title: "Trb", width: 45},
+{field:"dieSizeMM2", title: "die", width: 60},
+{field:"tdp", width: 40},
+{field:"transistorCountMln", title: "mln tr", width: 60, attributes: {style: "text-align: right"}},
+{field:"technology", title: "tech"},
+{field:"technologyNM", title: "nm", width: 40},
+{field:"memoControllerDDR3",title: "DDR3", width: 60},
+{field:"level1CacheKB",title:"lvl1", width: 50},
+{field:"level2CacheKB",title:"lvl2", width: 60},
+{field:"numberOfCores",title:"cores", width: 60},
+{field:"announcementDate",title:"date"},
+{field:"cineB",title: "rate"}
+]
+ 
+$(function(){
+$("#grid").kendoGrid({dataSource: cpus});
+$("#grd").kendoGrid({dataSource: cpus, columns: cols});
+});
+</script>
+
+</head>
+
+<body>
+<div id="grid"></div>
+<div id="grd"></div>
+</body>
+</html>

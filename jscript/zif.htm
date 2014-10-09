@@ -1,0 +1,60 @@
+http://jsfiddle.net/mwolfetech/X2NL6/
+https://github.com/dankogai/js-deflate
+  <script src="jquery-2.1.0.js"></script>
+  <script src="rawdeflate.js"></script>
+  <script src="rawinflate.js"></script>
+  <link rel="stylesheet" type="text/css" href="http://cdn.kendostatic.com/2014.2.903/styles/kendo.common.min.css">
+  <link rel="stylesheet" type="text/css" href="http://cdn.kendostatic.com/2014.2.903/styles/kendo.default.min.css">
+  <script type='text/javascript' src="http://cdn.kendostatic.com/2014.2.903/js/jquery.min.js"></script>
+  <script type='text/javascript' src="http://cdn.kendostatic.com/2014.2.903/js/kendo.all.min.js"></script>
+	<style>
+		body{font:90% sans-serif}
+	</style>
+<div><label for="myinput">Input: </label>
+<textarea id="myinput">
+Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec eu quam nulla. Donec tempus convallis arcu, et placerat ipsum porta sit amet. Donec scelerisque, libero at congue venenatis, augue est molestie nulla, at bibendum odio enim non mi. Aliquam iaculis accumsan erat ac facilisis. Vestibulum varius turpis vitae turpis imperdiet elementum. Fusce imperdiet dui sed erat commodo eu hendrerit augue tempus. Mauris varius ipsum nulla, in interdum mi. Cum sociis natoque
+</textarea>
+<span id="myinput_length"></span>
+</div>
+<div>
+<button id="encode">Encode</button>
+</div>
+<div>
+    <label for="output">Output: </label>
+<textarea id="output">
+
+</textarea>
+    <span id="myoutput_length"></span>
+</div>
+    <div><label for="reconstructed">Reconstructed: </label><textarea id="reconstructed">
+</textarea>
+    <span id="reconstructed_length"></span>
+    
+</div>
+<script>
+function encode(str) {
+    return RawDeflate.deflate(str);
+}
+
+function decode(str) {
+    return RawDeflate.inflate(str);
+}
+
+
+$('#encode').click(function() {
+    var str = $('#myinput').val(),
+        encoded = encode(str),
+        decoded = decode(encoded);
+
+    //alert($.base64.decode(encoded));  //uncomment to see raw deflated value;
+    $('#myinput_length').text('' + str.length);
+    $('#output').val(encoded);
+    $('#myoutput_length').text('' + encoded.length);
+    $('#reconstructed').val(decoded);
+    $('#reconstructed_length').text('' + decoded.length);
+
+});
+
+</script>
+
+

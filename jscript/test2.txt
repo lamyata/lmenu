@@ -1,0 +1,153 @@
+<div id="outDiv"></div>
+<script>
+document.getElementById('outDiv').innerHTML = 'hhaa';
+</script>
+<div id="outDiv2"></div>
+<script>
+outDiv2.innerHTML = 'direct access';
+</script>
+
+function closeScreen() {
+	@{
+		var url = string.IsNullOrEmpty(ViewBag.UrlReferrer)
+			? Url.Action("Index", "OperationReport", new { Area = "Stevedoring" })
+			: ViewBag.UrlReferrer;
+	}
+	window.location.href = '@url';
+}
+
+function getModel() {
+		var element = $(".k-scheduler-edit-form [data-bind]").get(0);
+		return element ? element.kendoBindingTarget.source : null;
+}
+http://www.telerik.com/forums/get-the-view-model-from-a-given-dom-element
+
+Events(e => e.Change("onChange").Select("onSelect"))
+
+Events(e => e.Cascade("onCascade").DataBound("onChildDataBound"))
+
+ $("#MeasurementUnitId").data("kendoDropDownList").value(4)
+ 
+    getPopup("PartnerPopup").change(function () {
+        var partnerId = getPopup("PartnerPopup").val();
+        if (partnerId > 0) {
+            $.ajax({
+                url: '@Url.Action("GetDefaultVat", "OrderItem")',
+                type: 'POST',
+                data: { Id: partnerId },
+                success: function (result) {
+
+                    //$('table#tblTransport').append('<tr><td style="width:50%">' + result.TransportTypeDescription + '</td><td>' + result.TransportReference + '</td></tr>');
+                    //$.each(result.TransportProperties, function () {
+                    //    $('table#tblTransport').append('<tr><td>' + this.Label + '</td><td>' + this.Value + '</td></tr>');
+                    //});
+                    //$("tr#trTransport").hide();
+                    //$("input#btnClearTransport").show();
+                },
+            })
+        }
+        else {
+            $("tr#trTransport").show();
+            $("input#btnClearTransport").hide();
+            $("table#tblTransport").find("tr:gt(2)").remove();
+        }
+
+    });
+
+		
+    $(function () {
+        debugger;
+
+        $.ajax({
+            url: '@Url.Action("GetDischarging")',
+            type: 'POST',
+            data: { Id: orderItem },
+            success: function (data) { }
+
+        });
+
+    });
+
+    //$("#orderItemInfo").html(detailSrc.OrderSequence + " " + detailSrc.OperationName + "<br />[Date]");
+
+    //var detSrc = $("#UnitId").get(0).kendoBindingTarget.source;
+    //var orderItem = detSrc.OrderItem;
+		
+		
+    $(function () {
+
+        $.ajax({
+            url: '@Url.Action("GetDischarging")',
+            type: 'POST',
+            data: { Id: '@Model.Id' },
+            success: function (data) {
+                currentData = data;
+                _observable = kendo.observable($.extend(true, {}, data));
+                kendo.bind($('#statdata'), _observable);
+            }
+
+        });
+
+    })
+		
+		
+http://localhost:20000/Stevedoring/OrderItem/Discharging?Id=2071&
+
+            $.ajax({
+                url: '@Url.Action("GetDefaultVatId", "OrderItem")',
+                type: 'POST',
+                data: { PartnerId: partnerId },
+                success: function (result) {
+                    //$("#VatId").data("kendoDropDownList").value(result);
+                }
+            })
+
+						
+                    //$("#VatId").data("kendoDropDownList").value(2);
+
+http://www.syncfusion.com/blogs/post/Telerikrsquo3bs-open-source-Kendo-UI-core-valuable-platform-or-marketing-gimmick.aspx
+http://bighow.net/7989841-Data_binding_in_Kendo_grid_popup_window_with_MultiSelect_widget.html
+http://stackoverflow.com/questions/20290795/data-binding-in-kendo-grid-popup-window-with-multiselect-widget
+http://stackoverflow.com/questions/23649364/kendo-ui-grid-selecting-same-value-as-in-clienttemplate-in-combobox-editortempla?rq=1
+http://stackoverflow.com/questions/14685193/kendo-grid-bind-cell-value-to-kendowindow
+http://demos.telerik.com/kendo-ui/window/events
+http://www.esspero.ru/modules/kendo/content/docs/kendo.ui.window.events.html
+http://stackoverflow.com/questions/16911300/bind-events-withing-kendo-grid
+http://stackoverflow.com/questions/21567116/bind-text-changed-event-to-text-area-in-editor-template-in-kendo-grid-mvc
+http://docs.telerik.com/kendo-ui/api/web/grid
+http://demos.telerik.com/aspnet-mvc/grid/events
+http://stackoverflow.com/questions/19374775/how-to-get-kendoui-grid-popup-add-edit-form-created-from-kendo-template-show-th
+										
+$("#VatId").data("kendoDropDownList").value(vatId);										
+var vmodel = $("#VatId").get(0).kendoBindingTarget.source
+vmodel.VatId = vatId;
+
+// new { orderItemId = @Model.Id, direction = FinancialEntityDirection.Out }
+
+            var defaultMuId = match[0].DefaultMeasurmentUnitId;
+            $("#MeasurementUnitId").data("kendoDropDownList").value(defaultMuId);
+
+						
+    function onTariffUnitChange(e) {
+        var unitId = $("#TariffInfoUnitId").val();
+        var match = $.grep(defMUs, function (e) { return e.Id == unitId; });
+        if (match) {
+            var defaultMuId = match[0].DefaultMeasurmentUnitId;
+            $("#TariffInfoMeasurementUnitId").data("kendoDropDownList").value(defaultMuId);
+        }
+    }
+    function onVatChange(e) {
+        var b = e.sender.dataSource.data().length;
+        console.log(b);
+    }
+                                    .HeaderTemplate("<table><tr><td width='80px'>Code</td><td width='120px'>Info</td><td width='50px'>Score</td></tr></table>")
+                                    .Template("<table><tr><td width='80px'>#:data.TariffInfoCode#</td><td width='120px'>#:data.TariffInfoDesc#</td><td width='50px'>#:data.TariffScore#</td></tr></table>")
+
+																		
+        model.set("CurrencyId", "");
+        model.set("CurrencyCode", "");
+        model.set("Total", "");
+        model.set("TotalBaseCurrency", "");
+        model.set("ExchangeRate", "");
+																		
+										

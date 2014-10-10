@@ -14,17 +14,7 @@
 <body>
 <div id="grd3"></div>
 <ul data-template="ul-template" data-bind="source: o_abbr"></ul>
-<input type="text"/>
-<input id="parent"/>
-<input id="ddl" />
-<div id="grd2"></div>
-<div id="lvw"></div>
 <div id="outDiv"></div>
-<div id ="listView"></div>
-
-<style scoped>
-#lvw,#listView{width:300px}
-</style>
 
 </body>
 </html>
@@ -40,61 +30,6 @@ $(function(){
 	var vm = kendo.observable({o_abbr: abbrevs});
 	kendo.bind($("ul"), vm);
 	
-	$("#parent").kendoDropDownList({
-		dataTextField: "parentName",
-		dataValueField: "parentId",
-		dataSource: [
-			{ parentName: "Parent1", parentId: 1 },
-			{ parentName: "Parent2", parentId: 2 }
-		]
-	});
-      
-	var ddl = $("#ddl").kendoDropDownList({
-		dataSource: {			data: ["One", "Two"]  },
-		filter: 'contains'
-	});
-	
-	$(".k-dropdow").on('mouseover', function(){
-		$('#parent').data("kendoDropDownList").open();
-	})
-	
-	$(".k-dropdown").on('focus', function(){
-		$('#parent').data("kendoDropDownList").open();
-	})
-	
- // $("#grd2").kendoGrid({
- //   dataSource: {
- //     transport: {
- //       read: {
- //         dataType: "jsonp",
- //         url: "http://demos.telerik.com/kendo-ui/service/Employees",
- //       }
- //     }
- //   }
- // });
-	
-var dataSource = new kendo.data.DataSource({
-  data: [ { name: "Tom" }, { name: "Ben" }]
-});
-$("#listView").kendoListView({
-     dataSource: dataSource,
-     template: "<div>#:name#</div>",
-     autoBind: false
- });
-dataSource.read(); // "read()" will fire the "change" event of the dataSource and the widget will be bound
-	
-	var orders = [{nm: 'Order0', id: 0}, {nm: 'Order1', id:1}];
-	
-	$("#lvw").kendoListView({
-		dataSource: orders,
-		selectable: true,
-		template: "<div>#:nm#</div>",
-		change: onLvwChange
-	});
-	
-//	$('.k-dropdown:has(#ItemId)').on("focus", function () {
-//		$('#ItemId').data('kendoDropDownList').open();
-//	})
   $("#grd3").kendoGrid({
 	dataSource: allCpus,
 	columns: cols
@@ -117,8 +52,11 @@ function onLvwChange(e) {
 //http://demos.telerik.com/kendo-ui/service/Weather
 
 var abbrevs = [
+	{ code: 'TDP', description: 'Thermal design power (in Watts)' },
+	{ code: 'Tr.Count', description: 'Transistor Count (in million transistors)' },
     { code : "SOI", description : "Silicon on Insulator" },
-    { code : "SHP", description : "Super High Performance" }
+    { code : "SHP", description : "Super High Performance" },
+    { code : "Cache", description : "Level 2 cache (in MB)" }
 ];
 
 var legend = 'Model|uArch|CodeNm|GHz|Turbo|Die|TDP|Mln|Tech|nm|lvl2|Cores|Date';

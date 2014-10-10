@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<link rel="stylesheet" type="text/css" href="http://cdn.kendostatic.com/2014.2.903/styles/kendo.common.min.css">
+	<link rel="stylesheet" type="text/css" href="http://cdn.kendostatic.com/2014.2.903/styles/kendo.default.min.css">
+	<script type='text/javascript' src="http://cdn.kendostatic.com/2014.2.903/js/jquery.min.js"></script>
+	<script type='text/javascript' src="http://cdn.kendostatic.com/2014.2.903/js/kendo.all.min.js"></script>
+	<style>
+		body{font:90% sans-serif}
+		#grd3 th,#grd3 td{text-align:center}
+		#grd3 .l{text-align:left}
+	</style>
+</head>
+<body>
+<div id="grd3"></div>
+<ul data-template="ul-template" data-bind="source: o_abbr"></ul>
+<input type="text"/>
+<input id="parent"/>
+<input id="ddl" />
+<div id="grd2"></div>
+<div id="lvw"></div>
+<div id="outDiv"></div>
+<div id ="listView"></div>
+
+<style scoped>
+#lvw,#listView{width:300px}
+</style>
+
+</body>
+</html>
+
+<script id="ul-template" type="text/x-kendo-template">
+    <li>
+        <span data-bind="text: code"></span> - <span data-bind="text: description">
+    </li>
+</script>
+
+<script type="text/javascript">
+$(function(){
+	var vm = kendo.observable({o_abbr: abbrevs});
+	kendo.bind($("ul"), vm);
+	
+	$("#parent").kendoDropDownList({
+		dataTextField: "parentName",
+		dataValueField: "parentId",
+		dataSource: [
+			{ parentName: "Parent1", parentId: 1 },
+			{ parentName: "Parent2", parentId: 2 }
+		]
+	});
+      
+	var ddl = $("#ddl").kendoDropDownList({
+		dataSource: {			data: ["One", "Two"]  },
+		filter: 'contains'
+	});
+	
+	$(".k-dropdow").on('mouseover', function(){
+		$('#parent').data("kendoDropDownList").open();
+	})
+	
+	$(".k-dropdown").on('focus', function(){
+		$('#parent').data("kendoDropDownList").open();
+	})
+	
+ // $("#grd2").kendoGrid({
+ //   dataSource: {
+ //     transport: {
+ //       read: {
+ //         dataType: "jsonp",
+ //         url: "http://demos.telerik.com/kendo-ui/service/Employees",
+ //       }
+ //     }
+ //   }
+ // });
+	
+var dataSource = new kendo.data.DataSource({
+  data: [ { name: "Tom" }, { name: "Ben" }]
+});
+$("#listView").kendoListView({
+     dataSource: dataSource,
+     template: "<div>#:name#</div>",
+     autoBind: false
+ });
+dataSource.read(); // "read()" will fire the "change" event of the dataSource and the widget will be bound
+	
+	var orders = [{nm: 'Order0', id: 0}, {nm: 'Order1', id:1}];
+	
+	$("#lvw").kendoListView({
+		dataSource: orders,
+		selectable: true,
+		template: "<div>#:nm#</div>",
+		change: onLvwChange
+	});
+	
+//	$('.k-dropdown:has(#ItemId)').on("focus", function () {
+//		$('#ItemId').data('kendoDropDownList').open();
+//	})
+  $("#grd3").kendoGrid({
+	dataSource: allCpus,
+	columns: cols
+  });
+
+});
+
+var sel;
+function onLvwChange(e) {
+		outDiv.innerHTML += e.sender.select().text() + '<br/>';
+}	
+
+//http://demos.telerik.com/kendo-ui/service/Customers
+//http://demos.telerik.com/kendo-ui/service/Employees
+//http://demos.telerik.com/kendo-ui/service/GanttDependencies
+//http://demos.telerik.com/kendo-ui/service/GanttTasks
+//http://demos.telerik.com/kendo-ui/service/Meetings
+//http://demos.telerik.com/kendo-ui/service/Products
+//http://demos.telerik.com/kendo-ui/service/Tasks
+//http://demos.telerik.com/kendo-ui/service/Weather
+
+var abbrevs = [
+    { code : "SOI", description : "Silicon on Insulator" },
+    { code : "SHP", description : "Super High Performance" }
+];
+
+var legend = 'Model|uArch|CodeNm|GHz|Turbo|Die|TDP|Mln|Tech|nm|lvl2|Cores|Date';
+var cpus2 = 'K325|K10|Geneva|1.3||116|12|234|SOI|45|1|2|5/12/2010^A8-4500M|Trinity||1.9|2.8|246|35|1303|SOI|32|4|4|05/15/2012\
+^A10-7300|Steamroller|Kaveri|1.9|3.2|245|19|2410|SHP|28|4|4|06/04/2014^A8-6410|Puma+|Beema|2|2.4||15|930||28|2|4|06/01/2014';
+
+var flds = legend.split('|');
+var cpus3 = cpus2.split('^');
+var colConfig = [];
+
+$.each(flds, function(ix, fld){
+	colConfig.push({field: fld.toString()});
+});
+
+function Cpu(cpuString){
+	var that = this;
+	var vals = cpuString.split('|');
+	$.each(flds, function(ix, fld){
+		that[fld.toString()] = vals[ix];
+	});
+}
+
+var allCpus = [];
+
+$.each(cpus3, function(ix, val){
+	allCpus.push(new Cpu(val));
+});
+  
+var cols = [
+{field:"Model",title:"CPU Model",attributes:{"class":"l"},headerAttributes:{"class":"l"}},
+{field:"uArch",title:"Microarchitecture",attributes:{"class":"l"},headerAttributes:{"class":"l"},width:130},
+{field:"TDP", width: 50,attributes:{style:"text-align:center"}},
+{field:"Mln",title:"Tr.Count",width:80,attributes:{style:"text-align: right"},headerAttributes:{style: "text-align: right"}},
+{field:"Tech", width: 50},
+{field:"nm", width: 40},
+{field:"lvl2",title:"lvl2",title:"Cache",width:60},
+{field:"Cores",title:"Cores",width:60},
+{field:"Date",width:100}
+]
+</script>

@@ -1,7 +1,10 @@
 <head>
-<script src="jquery-2.1.0.js"></script>
+<link rel="stylesheet" type="text/css" href="http://cdn.kendostatic.com/2014.2.903/styles/kendo.common.min.css">
+<link rel="stylesheet" type="text/css" href="http://cdn.kendostatic.com/2014.2.903/styles/kendo.default.min.css">
+<script type='text/javascript' src="http://cdn.kendostatic.com/2014.2.903/js/jquery.min.js"></script>
+<script type='text/javascript' src="http://cdn.kendostatic.com/2014.2.903/js/kendo.all.min.js"></script>
 <style type="text/css">
-body{margin:3%;font:normal 120% sans-serif}
+body{margin:3%;font:normal 130% sans-serif}
 </style>
 </head> 
 <body>
@@ -35,14 +38,30 @@ body{margin:3%;font:normal 120% sans-serif}
 &lt;/head&gt;
 </pre>
 
+<p>Telerik:</p>
+<pre>&lt;link rel=&quot;stylesheet&quot; type=&quot;text/css&quot; href=&quot;http://cdn.kendostatic.com/2014.2.903/styles/kendo.common.min.css&quot;&gt;
+&lt;link rel=&quot;stylesheet&quot; type=&quot;text/css&quot; href=&quot;http://cdn.kendostatic.com/2014.2.903/styles/kendo.default.min.css&quot;&gt;
+&lt;script type='text/javascript' src=&quot;http://cdn.kendostatic.com/2014.2.903/js/jquery.min.js&quot;&gt;&lt;/script&gt;
+&lt;script type='text/javascript' src=&quot;http://cdn.kendostatic.com/2014.2.903/js/kendo.all.min.js&quot;&gt;&lt;/script&gt;</pre>
 <p>Note: One big advantage of using the hosted jQuery from Google or Microsoft:
 Many users already have downloaded jQuery from Google or Microsoft when visiting another site. As a result, it will be loaded from cache when they visit your site,
 which leads to faster loading time. Also, most CDN's will make sure that once a user requests a file from it, it will be served from the server closest to them,
 which also leads to faster loading time.</p>
 
-<div id="log"></div>
+<h2>Objects</h2>
+<pre>var object1 = {
+apple: 0,
+banana: { weight: 52, price: 100 },
+cherry: 97
+};
+var object2 = {
+banana: { price: 200 },
+durian: 100
+};
+$.extend( object1, object2 );
+$(&quot;#log&quot;).append( JSON.stringify ( object1) );</pre>
 
-<script>
+<script type="text/javascript">
 var object1 = {
 apple: 0,
 banana: { weight: 52, price: 100 },
@@ -55,8 +74,93 @@ durian: 100
 
 $.extend( object1, object2 );
 
-$( "#log" ).append( JSON.stringify ( object1) );
+$("#log").append( JSON.stringify ( object1) );
 </script>
+<div id="log"></div>
+
+
+<h2>Input manipulations</h2>
+<input type="text" id="txt1" value="readonly='true'" readonly="true" />
+<input type="text" id="txt2" />
+<input type="text" id="txt3" value="disabled via blur()" />
+<div id="line2">
+	<input type="text" id="txtNum" value="I take only numbers" />
+</div>
+<script type="text/javascript">
+jQuery(document).ready(function(){
+
+    jQuery("#txt2").attr('readonly', true);
+  
+	$("#txt3").focus(function(){
+		$(this).blur();
+	}); // $ is a synonim of jQuery
+	   
+	$("#txtNum").keydown(function(e) {
+		if (e.shiftKey) e.preventDefault();
+		else {
+			var nKeyCode = e.keyCode;
+			if (nKeyCode == 8 || nKeyCode == 9) return; //Ignore Backspace and Tab keys
+			if (nKeyCode < 95) {
+				if (nKeyCode < 48 || nKeyCode > 57) e.preventDefault();
+			}
+			else if (nKeyCode > 105) e.preventDefault();
+		}
+	});
+    
+    $("#line2").append($("<input/>", {
+        id: 'txtDyn',
+        type: 'text',
+        val: 'dyn-generated'
+    }));
+	
+    $("<input/>", {
+        val: $().jquery
+    }).appendTo("#line2");
+	
+});
+</script>
+
+<pre>&lt;input type=&quot;text&quot; id=&quot;txt1&quot; value=&quot;readonly='true'&quot; readonly=&quot;true&quot; /&gt;
+&lt;input type=&quot;text&quot; id=&quot;txt2&quot; /&gt;
+&lt;input type=&quot;text&quot; id=&quot;txt3&quot; value=&quot;disabled via blur()&quot; /&gt;
+&lt;div id=&quot;line2&quot;&gt;
+&lt;input type=&quot;text&quot; id=&quot;txtNum&quot; value=&quot;I take only numbers&quot; /&gt;
+&lt;/div&gt;
+jQuery(document).ready(function(){
+
+  jQuery(&quot;#txt2&quot;).attr('readonly', true);
+
+  $(&quot;#txt3&quot;).focus(function(){
+    $(this).blur();
+  }); // $ is a synonim of jQuery
+
+  $(&quot;#txtNum&quot;).keydown(function(e) {
+    if (e.shiftKey) e.preventDefault();
+    else {
+      var nKeyCode = e.keyCode;
+      if (nKeyCode == 8 || nKeyCode == 9) return; //Ignore Backspace and Tab keys
+      if (nKeyCode &lt; 95) {
+        if (nKeyCode &lt; 48 || nKeyCode &gt; 57) e.preventDefault();
+      }
+      else if (nKeyCode &gt; 105) e.preventDefault();
+    }
+  });
+
+  $(&quot;#line2&quot;).append($(&quot;&lt;input/&gt;&quot;, {
+    id: 'txtDyn',
+    type: 'text',
+    val: 'dyn-generated'
+  }));
+
+  $(&quot;&lt;input/&gt;&quot;, {
+    val: $().jquery
+  }).appendTo(&quot;#line2&quot;);
+
+});</pre>
+
+
+
+
 
 <body>
 </head>

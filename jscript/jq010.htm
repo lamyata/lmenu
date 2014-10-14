@@ -5,6 +5,7 @@
 <script type='text/javascript' src="http://cdn.kendostatic.com/2014.2.903/js/kendo.all.min.js"></script>
 <style type="text/css">
 body{margin:3%;font:normal 130% sans-serif}
+pre{background:#ddd;font-size:80%}
 </style>
 </head> 
 <body>
@@ -18,7 +19,7 @@ body{margin:3%;font:normal 130% sans-serif}
 
 <p>The jQuery library is a single JavaScript file, and you reference it with the HTML &lt;script&gt; tag (notice that the &lt;script&gt; tag should be inside the &lt;head&gt; section):</p>
 
-<h3>Alternatives to Downloading</h3>
+<h4>Alternatives to Downloading</h4>
 
 <p>If you don't want to download and host jQuery yourself, you can include it from a CDN (Content Delivery Network).</p>
 
@@ -48,38 +49,36 @@ Many users already have downloaded jQuery from Google or Microsoft when visiting
 which leads to faster loading time. Also, most CDN's will make sure that once a user requests a file from it, it will be served from the server closest to them,
 which also leads to faster loading time.</p>
 
-<h2>Objects</h2>
+<h3>Objects</h3>
+<div id="log"></div>
+
 <pre>var object1 = {
-apple: 0,
-banana: { weight: 52, price: 100 },
-cherry: 97
+	apple: 0,
+	banana: { weight: 52, price: 100 },
+	cherry: 97
 };
 var object2 = {
-banana: { price: 200 },
-durian: 100
+	banana: { price: 200 },
+	durian: 100
 };
 $.extend( object1, object2 );
 $(&quot;#log&quot;).append( JSON.stringify ( object1) );</pre>
 
 <script type="text/javascript">
 var object1 = {
-apple: 0,
-banana: { weight: 52, price: 100 },
-cherry: 97
+	apple: 0,
+	banana: { weight: 52, price: 100 },
+	cherry: 97
 };
 var object2 = {
-banana: { price: 200 },
-durian: 100
+	banana: { price: 200 },
+	durian: 100
 };
-
 $.extend( object1, object2 );
-
 $("#log").append( JSON.stringify ( object1) );
 </script>
-<div id="log"></div>
 
-
-<h2>Input manipulations</h2>
+<h3>Input manipulations</h3>
 <input type="text" id="txt1" value="readonly='true'" readonly="true" />
 <input type="text" id="txt2" />
 <input type="text" id="txt3" value="disabled via blur()" />
@@ -117,6 +116,7 @@ jQuery(document).ready(function(){
         val: $().jquery
     }).appendTo("#line2");
 	
+    divOut.innerHTML = 'There are ' + $("input:text").length + ' textboxes on this page.';
 });
 </script>
 
@@ -156,9 +156,10 @@ jQuery(document).ready(function(){
     val: $().jquery
   }).appendTo(&quot;#line2&quot;);
 
+  divOut.innerHTML = 'There are ' + $('input:text').length + ' textboxes on this page.';
 });</pre>
 
-
+<div id="divOut"></div>
 
 
 

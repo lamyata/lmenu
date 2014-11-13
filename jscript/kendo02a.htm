@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <script src="cpus.js"></script>
+  <script src="jquery-2.1.0.js"></script>
+  <link rel="stylesheet" type="text/css" href="http://cdn.kendostatic.com/2014.2.903/styles/kendo.common.min.css">
+  <link rel="stylesheet" type="text/css" href="http://cdn.kendostatic.com/2014.2.903/styles/kendo.default.min.css">
+  <script type='text/javascript' src="http://cdn.kendostatic.com/2014.2.903/js/jquery.min.js"></script>
+  <script type='text/javascript' src="http://cdn.kendostatic.com/2014.2.903/js/kendo.all.min.js"></script>
+	<style>
+		body{font:90% sans-serif}
+	</style>
+</head>
+<body>
+
+<div id="divOut"></div>
+<input id="prods">
+<select id="multiselect" multiple="multiple" data-bind="value: values, source: products"></select>
+<script>
+$("#prods").bind("change", function(){
+	viewModel.values = $("#prods").text();
+});
+$("#multiselect").kendoMultiSelect({
+  valuePrimitive: true,
+  dataTextField: "name",
+  dataValueField: "id",
+  change: function (e){
+    divOut.innerHTML = e.sender.value();
+		$("#prods").text(viewModel.values);
+  },	
+});
+var viewModel = kendo.observable({
+  values: [],
+  products: [
+    { id: 1, name: "Coffee" },
+    { id: 2, name: "Tea" },
+    { id: 3, name: "Juice" },
+    { id: 4, name: "Tom" },
+    { id: 5, name: "Tim" },
+    { id: 6, name: "Ken" },
+  ]
+});
+
+kendo.bind($("#multiselect"), viewModel);
+</script>
+
+</body>
+</html>

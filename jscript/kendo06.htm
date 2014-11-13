@@ -22,6 +22,25 @@
 <div id="outDiv"></div>
 <div id ="listView"></div>
 
+<select id="multiselect" multiple="multiple" data-bind="value: values, source: products"></select>
+<script>
+$("#multiselect").kendoMultiSelect({
+  valuePrimitive: true,
+  dataTextField: "name",
+  dataValueField: "id"
+});
+var viewModel = kendo.observable({
+  selectedProductId: [],
+  products: [
+    { id: 1, name: "Coffee" },
+    { id: 2, name: "Tea" },
+    { id: 3, name: "Juice" }
+  ]
+});
+
+kendo.bind($("#multiselect"), viewModel);
+</script>
+
 <style scoped>
 #lvw,#listView{width:300px}
 </style>

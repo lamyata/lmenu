@@ -50,7 +50,6 @@ which leads to faster loading time. Also, most CDN's will make sure that once a 
 which also leads to faster loading time.</p>
 
 <h3>Objects</h3>
-<div id="log"></div>
 
 <pre>var object1 = {
 	apple: 0,
@@ -64,6 +63,7 @@ var object2 = {
 $.extend( object1, object2 );
 $(&quot;#log&quot;).append( JSON.stringify ( object1) );</pre>
 
+<div id="log"></div>
 <script type="text/javascript">
 var object1 = {
 	apple: 0,
@@ -76,6 +76,7 @@ var object2 = {
 };
 $.extend( object1, object2 );
 $("#log").append( JSON.stringify ( object1) );
+$("#log").append($("<div/>", {id: 'hhh', text: '123123'}));
 </script>
 
 <h3>Input manipulations</h3>

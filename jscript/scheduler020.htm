@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Kendo UI Snippet</title>
+
+    <link rel="stylesheet" href="http://cdn.kendostatic.com/2014.3.1029/styles/kendo.common.min.css">
+    <link rel="stylesheet" href="http://cdn.kendostatic.com/2014.3.1029/styles/kendo.rtl.min.css">
+    <link rel="stylesheet" href="http://cdn.kendostatic.com/2014.3.1029/styles/kendo.default.min.css">
+    <link rel="stylesheet" href="http://cdn.kendostatic.com/2014.3.1029/styles/kendo.dataviz.min.css">
+    <link rel="stylesheet" href="http://cdn.kendostatic.com/2014.3.1029/styles/kendo.dataviz.default.min.css">
+    <link rel="stylesheet" href="http://cdn.kendostatic.com/2014.3.1029/styles/kendo.mobile.all.min.css">
+
+    <script src="http://code.jquery.com/jquery-1.9.1.min.js"></script>
+    <script src="http://cdn.kendostatic.com/2014.3.1029/js/kendo.all.min.js"></script>
+</head>
+<body>
+
+<style scoped>
+    #sched050 .k-scheduler-header-wrap .k-scheduler-table th {
+        max-width: 30px;
+        width: 40px;
+    }
+</style>
+
+<div id="sched050"></div>
+<script>
+var mView2 = kendo.ui.MultiDayView.extend({    
+  options: {    
+    selectedDateFormat: "{0:D}-{1:D}"
+  },
+  name: "mView2",
+  calculateDateRange: function() {
+	var fromDate = new Date(2013,4,24),
+	endDate = new Date(2013,7,10), dates = [];
+	while (fromDate <= endDate) {
+		dates.push(fromDate);
+		fromDate = kendo.date.nextDay(fromDate);
+	}
+    this._render(dates);    
+  }
+});
+
+$("#sched050").kendoScheduler({
+  date: new Date("2013/6/6"),
+  height: 200,
+  allDaySlot: false,
+  footer: false,
+  showWorkHours: true,
+  majorTick: 1440,
+  majorTimeHeaderTemplate: '',
+  group: {
+    resources: ["Rooms"],
+    orientation: "vertical"
+  },
+  editable: {
+    destroy: true
+  },
+  views: [{ type: mView2, title: "Multi View",
+dateHeaderTemplate: kendo.template('#=kendo.toString(date, "MMM dd")#'),	}
+  ],
+  dataSource: [
+    {
+      id: 1,
+      start: new Date("2013/6/6 10:00 AM"),
+      end: new Date("2013/6/6 11:00 AM"),
+      title: "Interview",
+	  roomId: 1
+    },
+    {
+      id: 2,
+      start: new Date("2013/6/6 12:00 PM"),
+      end: new Date("2013/6/6 1:00 PM"),
+      title: "Meeting",
+      roomId: 2 // the event is held in "Big meeting room" whose value is 2
+    }
+  ],
+  resources: [
+    {
+      field: "roomId",
+      name: "Rooms",
+      dataColorField: "key",
+      dataSource: [
+        { text: "Small meeting room", value: 1, key: "#aabbcc" },
+        { text: "Big meeting room", value: 2, key: "green" }
+      ]
+    }
+  ]
+
+});
+
+kendo.ui.MultiDayView.fn._arrangeColumns = function (element, top, height, slotRange) {
+console.log('fn');
+	var startSlot = slotRange.start;
+
+	element = {
+		element: element,
+		slotIndex: startSlot.index,
+		start: top,
+		end: top + height
+	};
+
+	var columns,
+		slotWidth = startSlot.clientWidth,
+		slotHeight = startSlot.clientHeight,
+		eventRightOffset = slotWidth * 0.10,
+		columnEvents,
+		eventElements = slotRange.events(),
+		slotEvents = kendo.ui.SchedulerView.collidingEvents(eventElements, element.start, element.end);
+
+	slotRange.addEvent(element);
+	slotEvents.push(element);
+	columns = kendo.ui.SchedulerView.createColumns(slotEvents);
+
+	var columnWidth = (slotWidth - eventRightOffset) / columns.length;
+	for (var idx = 0, length = columns.length; idx < length; idx++) {
+		columnEvents = columns[idx].events;
+
+		for (var j = 0, eventLength = columnEvents.length; j < eventLength; j++) {
+			columnEvents[j].element[0].style.width = columnWidth - 4 + "px";
+			var tmp_left = (this._isRtl ? this._scrollbarOffset(eventRightOffset) : 0) + startSlot.offsetLeft * 1.15 + idx * columnWidth + 1 + "px";
+			console.log(tmp_left);
+			columnEvents[j].element[0].style.left = tmp_left;
+		}
+	}
+};
+</script>
+
+</body>
+</html>

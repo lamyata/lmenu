@@ -16,31 +16,355 @@
 </head>
 <body>
   
-<div id="scheduler"></div>
+<div id="sched010"></div>
 <div style="float:right;position:absolute;top:0;right:0">
 <a href="http://docs.telerik.com/kendo-ui/api/javascript/ui/scheduler">Kendo Scheduler doc</a>
 <a href="http://dojo.telerik.com">Telerik Dojo</a>
 <a href="http://www.w3schools.com/css/css_positioning.asp">CSS Positioning<a>
+<a href="http://www.telerik.com/forums/how-to-create-a-rolling-week-view-">How to Create a Rolling Week View?</a>
 </div>
 <script>
-$("#scheduler").kendoScheduler({
+$("#sched010").kendoScheduler({
   date: new Date("2013/6/6"),
-	width: 500,
+  width: 700,
+  allDaySlot: false,
+  footer: false,
+  showWorkHours: true,
   editable: {
     destroy: true
   },
   views: [
-    { type: "day" }
+    { type: "day", slotTemplate: kendo.template("<strong>#=kendo.toString(date)#</strong>") },
+    { type: "week" },
+    { type: "month" }
   ],
   dataSource: [
     {
       id: 1,
-      start: new Date("2013/6/6 08:00 AM"),
-      end: new Date("2013/6/6 09:00 AM"),
+      start: new Date("2013/6/6 10:00 AM"),
+      end: new Date("2013/6/6 11:00 AM"),
       title: "Interview"
     }
   ]
 });
 </script>
+<div id="sched020"></div>
+<script id="slotTemplate" type="text/x-kendo-template">
+    # var resources = data.resources(); #
+    # var color = resources.roomId === 1 ? "red" : "blue"; #
+
+    <span style="background: #=color#">
+      #=kendo.toString(date, "d")#
+    </span>
+</script>
+<script>
+$("#sched020").kendoScheduler({
+  date: new Date("2013/6/6"),
+  views: [{
+    type: "day",
+    slotTemplate: kendo.template($("#slotTemplate").html())
+  }],
+  group: {
+    resources: ["Rooms"]
+  },
+  resources: [
+    {
+      field: "roomId",
+      name: "Rooms",
+      dataSource: [
+        { text: "Meeting Room 101", value: 1, color: "#6eb3fa" },
+        { text: "Meeting Room 201", value: 2, color: "#f58a8a" }
+      ],
+      title: "Room"
+    }
+  ]
+});
+</script>
+<div id="sched025"></div>
+<script>
+$("#sched025").kendoScheduler({
+  date: new Date("2013/6/6"),
+  dataSource: [
+    {
+      id: 1,
+      start: new Date("2013/6/6 08:00 AM"),
+      end: new Date("2013/6/6 09:00 AM"),
+      title: "Interview",
+      roomId: 1 // the event is held in "Small meeting room" whose value is 1
+    },
+    {
+      id: 2,
+      start: new Date("2013/6/6 08:00 AM"),
+      end: new Date("2013/6/6 09:00 AM"),
+      title: "Meeting",
+      roomId: 2 // the event is held in "Big meeting room" whose value is 2
+    }
+  ],
+  resources: [
+    {
+      field: "roomId",
+      dataColorField: "key",
+      dataSource: [
+        { text: "Small meeting room", value: 1, key: "#aabbcc" },
+        { text: "Big meeting room", value: 2, key: "green" }
+      ]
+    }
+  ]
+});
+</script>
+
+<div id="sched027"></div>
+<script>
+$("#sched027").kendoScheduler({
+            majorTick: 1440,
+            minorTickCount: 1,
+            timezone: 'Etc/UTC',
+            majorTimeHeaderTemplate: '',
+			date: new Date("2013/6/6"),
+  allDaySlot: false,
+  group: {
+    resources: ["Rooms"],
+    orientation: "vertical"
+  },
+  dataSource: [
+    {
+      id: 1,
+      start: new Date("2013/6/6 08:00 AM"),
+      end: new Date("2013/6/6 09:00 AM"),
+      title: "Interview",
+      roomId: 1 // the event is held in "Small meeting room" whose value is 1
+    },
+    {
+      id: 2,
+      start: new Date("2013/6/6 08:00 AM"),
+      end: new Date("2013/6/6 09:00 AM"),
+      title: "Meeting",
+      roomId: 2 // the event is held in "Big meeting room" whose value is 2
+    }
+  ],
+  resources: [
+    {
+      field: "roomId",
+      name: "Rooms",
+      dataColorField: "key",
+      dataSource: [
+        { text: "Small meeting room", value: 1, key: "#aabbcc" },
+        { text: "Big meeting room", value: 2, key: "green" }
+      ]
+    }
+  ]
+});
+</script>
+
+<div id="sched030"></div>
+<script>
+var CustomView = kendo.ui.MultiDayView.extend({    
+  options: {    
+    selectedDateFormat: "{0:D}-{1:D}"
+  },
+  name: "customView",
+  calculateDateRange: function() {
+    //create a range of dates to be shown within the view
+    
+    var selectedDate = this.options.date,
+        start = kendo.date.dayOfWeek(selectedDate, this.calendarInfo().firstDay, -1),
+        idx, length,
+        dates = [];
+ 
+    for (idx = 0, length = 7; idx < length; idx++) {
+      if (start.getDay() != 6) {
+        dates.push(start);
+      }
+      start = kendo.date.nextDay(start);
+    }
+    
+    this._render(dates);    
+  }
+
+});
+
+$("#sched030").kendoScheduler({
+  date: new Date("2013/6/13"),
+  startTime: new Date("2013/6/13 07:00 AM"),
+  height: 600,
+  views: [
+    "day",           
+    { type: CustomView, title: "Custom View" }
+  ],
+  timezone: "Etc/UTC",
+  dataSource: {
+    batch: true,
+    transport: {
+      read: {
+        url: "http://demos.kendoui.com/service/tasks",
+        dataType: "jsonp"
+      },
+      update: {
+        url: "http://demos.kendoui.com/service/tasks/update",
+        dataType: "jsonp"
+      },
+      create: {
+        url: "http://demos.kendoui.com/service/tasks/create",
+        dataType: "jsonp"
+      },
+      destroy: {
+        url: "http://demos.kendoui.com/service/tasks/destroy",
+        dataType: "jsonp"
+      },
+      parameterMap: function(options, operation) {
+        if (operation !== "read" && options.models) {
+          return {models: kendo.stringify(options.models)};
+        }
+      }
+    },
+    schema: {
+      model: {
+        id: "taskId",
+        fields: {
+          taskId: { from: "TaskID", type: "number" },
+          title: { from: "Title", defaultValue: "No title", validation: { required: true } },
+          start: { type: "date", from: "Start" },
+          end: { type: "date", from: "End" },
+          startTimezone: { from: "StartTimezone" },
+          endTimezone: { from: "EndTimezone" },
+          description: { from: "Description" },
+          recurrenceId: { from: "RecurrenceID" },
+          recurrenceRule: { from: "RecurrenceRule" },
+          recurrenceException: { from: "RecurrenceException" },
+          ownerId: { from: "OwnerID", defaultValue: 1 },
+          isAllDay: { type: "boolean", from: "IsAllDay" }
+        }
+      }
+    }
+    
+  }
+});
+</script>
+<div id="sched040"></div>
+<script>
+var mView = kendo.ui.MultiDayView.extend({    
+  options: {    
+    selectedDateFormat: "{0:D}-{1:D}"
+  },
+  name: "mView",
+  calculateDateRange: function() {
+	var fromDate = new Date(2013,4,24),
+	endDate = new Date(2013,5,10), dates = [];
+	while (fromDate <= endDate) {
+		dates.push(fromDate);
+		fromDate = kendo.date.nextDay(fromDate);
+	}
+    this._render(dates);    
+  }
+});
+
+$("#sched040").kendoScheduler({
+  date: new Date("2013/6/6"),
+  width: 1000,
+  height: 600,
+  allDaySlot: false,
+  footer: false,
+  showWorkHours: true,
+  editable: {
+    destroy: true
+  },
+  views: ["week",
+    { type: mView, title: "Multi View" }
+  ],
+  dataSource: [
+    {
+      id: 1,
+      start: new Date("2013/6/6 10:00 AM"),
+      end: new Date("2013/6/6 11:00 AM"),
+      title: "Interview"
+    }
+  ]
+});
+</script>
+<hr/>
+<style scoped>
+    #sched050 .k-scheduler-header-wrap .k-scheduler-table th {
+        max-width: 30px;
+        width: 40px;
+    }
+</style>
+
+<div id="sched050"></div>
+<script>
+var mView2 = kendo.ui.MultiDayView.extend({    
+  options: {    
+    selectedDateFormat: "{0:D}-{1:D}"
+  },
+  name: "mView2",
+  calculateDateRange: function() {
+	var fromDate = new Date(2013,4,24),
+	endDate = new Date(2013,7,10), dates = [];
+	while (fromDate <= endDate) {
+		dates.push(fromDate);
+		fromDate = kendo.date.nextDay(fromDate);
+	}
+    this._render(dates);    
+  }
+});
+
+$("#sched050").kendoScheduler({
+  date: new Date("2013/6/6"),
+  height: 200,
+  allDaySlot: false,
+  footer: false,
+  showWorkHours: true,
+  majorTick: 1440,
+  majorTimeHeaderTemplate: '',
+  editable: {
+    destroy: true
+  },
+  views: [{ type: mView2, title: "Multi View",
+dateHeaderTemplate: kendo.template('#=kendo.toString(date, "MMM dd")#'),	}
+  ],
+  dataSource: [
+    {
+      id: 1,
+      start: new Date("2013/6/6 10:00 AM"),
+      end: new Date("2013/6/6 11:00 AM"),
+      title: "Interview"
+    }
+  ]
+});
+
+kendo_ui.MultiDayView_fn._arrangeColumns = function (element, top, height, slotRange) {
+	var startSlot = slotRange.start;
+
+	element = {
+		element: element,
+		slotIndex: startSlot.index,
+		start: top,
+		end: top + height
+	};
+
+	var columns,
+		slotWidth = startSlot.clientWidth,
+		slotHeight = startSlot.clientHeight,
+		eventRightOffset = slotWidth * 0.10,
+		columnEvents,
+		eventElements = slotRange.events(),
+		slotEvents = kendo.ui.SchedulerView.collidingEvents(eventElements, element.start, element.end);
+
+	slotRange.addEvent(element);
+	slotEvents.push(element);
+	columns = kendo.ui.SchedulerView.createColumns(slotEvents);
+
+	var columnWidth = (slotWidth - eventRightOffset) / columns.length;
+	for (var idx = 0, length = columns.length; idx < length; idx++) {
+		columnEvents = columns[idx].events;
+
+		for (var j = 0, eventLength = columnEvents.length; j < eventLength; j++) {
+			columnEvents[j].element[0].style.width = columnWidth - 4 + "px";
+			var tmp_left = (this._isRtl ? this._scrollbarOffset(eventRightOffset) : 0) + startSlot.offsetLeft * 1.15 + idx * columnWidth + 1 + "px";
+			columnEvents[j].element[0].style.left = tmp_left;
+		}
+	}
+};
+</script>
+
 </body>
 </html>

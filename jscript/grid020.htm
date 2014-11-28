@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Grid</title>
+
+    <link rel="stylesheet" href="http://cdn.kendostatic.com/2014.3.1119/styles/kendo.common.min.css">
+    <link rel="stylesheet" href="http://cdn.kendostatic.com/2014.3.1119/styles/kendo.rtl.min.css">
+    <link rel="stylesheet" href="http://cdn.kendostatic.com/2014.3.1119/styles/kendo.default.min.css">
+    <link rel="stylesheet" href="http://cdn.kendostatic.com/2014.3.1119/styles/kendo.dataviz.min.css">
+    <link rel="stylesheet" href="http://cdn.kendostatic.com/2014.3.1119/styles/kendo.dataviz.default.min.css">
+    <link rel="stylesheet" href="http://cdn.kendostatic.com/2014.3.1119/styles/kendo.mobile.all.min.css">
+
+    <script src="http://cdn.kendostatic.com/2014.3.1119/js/jquery.min.js"></script>
+    <script src="http://cdn.kendostatic.com/2014.3.1119/js/kendo.all.min.js"></script>
+</head>
+<body>
+
+<a href="http://www.telerik.com/forums/skip-read-only-fields-when-using-keyboard-navigation-on-navigatable-grid-in-batch-edit-mode">
+Skip read only fields when using keyboard navigation on navigatable grid in batch edit mode</a>
+
+<div id="divOut"></div>
+<div id="grid"></div>
+
+<script>
+	function onGridKeydown(e){
+		if (e.keyCode === kendo.keys.TAB) {
+			var grid = $(this).closest("[data-role=grid]").data("kendoGrid");
+			var current = grid.current();
+			if (!current.hasClass("editable-cell")) {
+				var nextCell = current.nextAll(".editable-cell");
+				if (!nextCell[0]) {
+					//search the next row
+					var nextRow = current.parent().next();
+					var nextCell = current.parent().next().children(".editable-cell:first"); 
+				} 
+				grid.current(nextCell);
+				grid.editCell(nextCell[0])
+			}
+		} 
+	};
+	
+	$(document).ready(function() { 
+		var crudServiceBaseUrl = "http://demos.kendoui.com/service";
+		var dataSource = new kendo.data.DataSource({
+			transport: {
+						read:  {
+							url: crudServiceBaseUrl + "/Products",
+							dataType: "jsonp"
+						},
+						update: {
+							url: crudServiceBaseUrl + "/Products/Update",
+							dataType: "jsonp"
+						},
+						destroy: {
+							url: crudServiceBaseUrl + "/Products/Destroy",
+							dataType: "jsonp"
+						},
+						create: {
+							url: crudServiceBaseUrl + "/Products/Create",
+							dataType: "jsonp"
+						},
+						parameterMap: function(options, operation) {
+							if (operation !== "read" && options.models) {
+								return {models: kendo.stringify(options.models)};
+							}
+						}
+					},
+					batch: true,
+					pageSize: 20,
+					schema: {
+						model: {
+							id: "ProductID",
+							fields: {
+								ProductID: { editable: false, nullable: true },
+								ProductName: { editable: false, validation: { required: true } },
+								UnitPrice: { type: "number", validation: { required: true, min: 1}},
+								UnitsInStock: {editable: false, type: "number", validation: { min: 0, required: true },},
+								Discontinued: { type: "boolean" }
+							}
+						}
+					}
+				});
+		
+		$("#grid").kendoGrid({
+			dataSource: dataSource,  
+			editable: true,
+			navigatable: true,
+			toolbar: ["create", "save", "cancel"],
+			columns: [
+				{ field: "ProductName", title: "Product Name", width: 110 },
+				{ field: "UnitPrice", title: "Unit Price", format: "{0:c}", width: 110, attributes: {class: "editable-cell" } },
+				{ field: "UnitsInStock", title: "Units In Stock", width: 110 },
+				{ field: "UnitsInStock", title: "Units In Stock", width: 110 },
+				{ field: "UnitPrice", title: "Unit Price", format: "{0:c}", width: 110, attributes: {class: "editable-cell" } },
+				{ field: "ProductName", title: "Product Name", width: 110 },
+				{ field: "ProductName", title: "Product Name", width: 110 },
+				{ field: "UnitPrice", title: "Unit Price", format: "{0:c}", width: 110, attributes: {class: "editable-cell" } },
+				{ command: "destroy", title: "", width: 90 }]
+		}).find("table").on("keydown", onGridKeydown);      
+	});
+</script> 
+
+</body>
+</html>

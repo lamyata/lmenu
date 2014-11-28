@@ -82,3 +82,77 @@ $(document).ready(function() {
 
 </body>
 </html>
+
+<div id="rlGrid" style="margin:0 18px"></div>
+
+<script>
+
+    $(function () {
+
+        $("#rlGrid").kendoGrid({
+            toolbar: [
+              { name: "create", text: "@Strings.AddNewItem" }
+            ],
+            @* sortable: true,*@
+            scrollable: true,
+            editable: {
+                mode: 'popup',
+                template: '_FinancialLineDetail'
+            },
+            columns: [
+                { field: "PartnerName", title: "@Strings.lblPartner", width: 500 },
+             @*
+                 {
+                     field: "Value",
+                     title: "@Strings.lblValue",
+                     template: "<input class='k-input k-textbox' name='Value' type='text' value='${Value}' data-bind='value: Value' />"
+                 },
+
+             *@
+                { field: 'Quantity', title: '@Strings.lblQuantity', headerAttributes: { style: "text-align: right" }, attributes: { style: "text-align: right" }, template: "#=kendo.toString(Quantity,'n2')# #=UnitDescription# #if(MeasurementUnitDescription){# #=MeasurementUnitDescription# #}#" },
+                { field: 'TariffInfoTariff', title: '@Strings.lblTariff', headerAttributes: { style: "text-align: right" }, attributes: { style: "text-align: right" }, template: "#=kendo.toString(TariffInfoTariff,'n2')# #=TariffInfoCurrencyCode#"},
+                { field: 'TariffInfoUnitDescription', title: '@Strings.lblUnit', template: "#=TariffInfoUnitDescription# #if(TariffInfoMeasurementUnitDescription){# #=TariffInfoMeasurementUnitDescription# #}#"},
+                { field: 'Total', title: '@Strings.lblTotal', headerAttributes: { style: "text-align: right" }, attributes: { style: "text-align: right" }, template: "#=kendo.toString(Total,'n2')# #=CurrencyCode#"},
+                { field: 'VatCode', title: '@Strings.lblVAT', template: "#=VatCode# #=VatPercentage#%"},
+                { field: 'ValueDate', title: '@Strings.ValueDate', headerAttributes: { style: "text-align: right" }, attributes: { style: "text-align: right" }, template: "#=kendo.toString(ValueDate,'d')#"},
+                { attributes: { style: "white-space: nowrap" }, width: "150px", template: "# if (ParentId) {#<a class='k-button k-button-icontext k-state-disabled' title='Edit'><span class='k-icon k-edit'></span>Edit</a><a class='k-button k-button-icontext k-state-disabled' title='Delete'><span class='k-icon k-delete'></span>Delete</a>#} else {#<a class='k-button k-button-icontext k-grid-edit' title='Edit'><span class='k-icon k-delete'></span>Edit</a><a class='k-button k-button-icontext k-grid-delete' title='Delete'><span class='k-icon k-delete'></span>Delete</a>#}#"}
+            ],
+            dataSource: {
+                autoSync: true,
+                error: error_handler,
+                transport: {
+                    create: {
+                        url: '@Url.Action("Create", "FinancialLineTemp")',
+                        type: 'POST',
+                        data: getRevenueLineParameters()
+                    },
+                    read: {
+                        url: '@Url.Action("GetRevenueLines", "OrderItem")',
+                        type: 'POST',
+                        data: getRevenueLineParameters()
+                    },
+                    update: {
+                        url: '@Url.Action("Update", "FinancialLineTemp")',
+                        type: 'POST'
+                    },
+                    destroy: {
+                        url: '@Url.Action("Delete", "FinancialLineTemp")',
+                        type: 'POST'
+                    },
+                },
+                type: "aspnetmvc-ajax",
+                pageSize: 0,
+                schema: {
+                    data: "Data",
+                    total: "Total",
+                    errors: "Errors",
+                    model: {
+                        model: {
+                            id: 'Id',
+                        }
+                    }
+                }
+            }
+        });
+
+    })

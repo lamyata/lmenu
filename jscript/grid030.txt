@@ -1,0 +1,86 @@
+@using Resources;
+@{
+    Html.iTos().Overview().FilterPanel().MaxSize("120px");
+}
+
+<div class="content orderViewSettings">
+    <div id="acvmaterials" style="width:600px"></div>
+</div><hr />
+@*@(Html.Partial("Index/_BodyPartial"))
+
+@(Scripts.Render("~/Scripts/Views/Shared/OverviewFilter.js"))*@
+
+<script type="text/javascript">
+
+    $(function () {
+
+
+        $("#acvmaterials").kendoGrid({
+            dataSource: {
+                transport: {
+                    read: {
+                        url: '@Url.Action("Read", "ACVMaterial")',
+                        type: 'POST'
+                        @*
+                        data: {
+                            BudgetItemId: this._model.Id
+                        }
+                        *@
+                    },
+                },
+                schema: {
+                    data: 'Data',
+                    total: "Total",
+                    errors: "Errors",
+                    model: { id: "Id" }
+                },
+            },
+            editable: "popup",
+            toolbar: ["create"],
+            columns: [
+                { field: 'Code', width: '80px' },
+                { field: 'ShortDescription', width: '300px' },
+                {
+                    field: 'TypeId',
+                    title: 'ProductType',
+                    editor: function (container, options) {
+                        $('<input data-bind="value: TypeId" />')
+                            .appendTo(container)
+                            .kendoComboBox({
+                                autoBind: false,
+                                placeholder: 'that._viewConfig.strings.SearchPeople',
+                                dataTextField: 'Description',
+                                dataValueField: 'Id',
+                                valuePrimitive: true,
+                                dataSource: {
+                                    transport: {
+                                        read: {
+                                            dataType: 'json',
+                                            url: '@Url.Action("List", "ProductType")'
+                                        }
+                                    }
+                                }
+                            }).data('kendoComboBox');
+                    }
+                },
+
+
+
+                { command: "edit" }
+            ],
+            pageable: {
+                pageSize: 10
+            }
+        });
+    });
+</script>
+
+            <input id="productType"  data-role="combobox" data-value-primitive="true" data-bind="source: MeasurementUnits, value: TypeId" data-text-field="Description" data-value-field="Id" /></label>
+
+
+                        @*
+                            data: {
+            BudgetItemId: this._model.Id
+                            }
+        *@
+

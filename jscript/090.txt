@@ -1,0 +1,20 @@
+-how to pass info to ajax call that loads combo:
+
+        $("#Customers").kendoDropDownList({
+            dataTextField: "Name",
+            dataValueField: "Id",
+            optionLabel: that._config.strings.Select,
+            dataSource: {
+                transport: {
+                    read: {
+                        url: that._config.urls.CustomerList,
+                        data: {
+                            hasRate: true
+                        }
+                    }
+                }
+            }
+        });
+
+-how to get last day of month
+http://stackoverflow.com/questions/2493032/how-to-get-the-last-day-of-a-month

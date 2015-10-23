@@ -1,0 +1,23 @@
+$.ajax({
+	url: that._config.urls.CustomerList,
+	type: 'POST',
+	success: function (results) {
+		$("#cboCustomer").kendoDropDownList({
+			 dataTextField: "Name",
+			 dataValueField: "Id",
+			 valuePrimitive: true,
+			 optionLabel: "Select",
+			 dataSource: {
+				schema: {
+				 model: {
+					fields: {
+					 "Id": { type: 'number' },
+					 "Name": {type: 'string'}
+					}
+				 }
+				},
+				data: results.Owners
+			 }
+		});
+	}
+});

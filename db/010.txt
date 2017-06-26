@@ -1,24 +1,4 @@
-To restore db in sql management studio: right click on 'Databases' folder
 
-RESTORE DATABASE iTosProd WITH RECOVERY
-
----
-USE master
-GO
-
-ALTER DATABASE iTosProd
-SET SINGLE_USER
---This rolls back all uncommitted transactions in the db.
-WITH ROLLBACK IMMEDIATE
-GO
-
-RESTORE DATABASE iTosProd
-FROM DISK = N'C:\Program Files\Microsoft SQL Server\MSSQL11.MAIN\MSSQL\Backup\iTosProd2.bak'
-WITH REPLACE
-
-GO
-
----
 create table #PRODS_TO_KEEP (ID int)
 insert into #PRODS_TO_KEEP select PRODUCT_ID from VMG_KIT k join PRODUCT p on k.CODE = p.CODE
 insert into #PRODS_TO_KEEP select PRODUCT_ID from VMG_KIT_ITEM
